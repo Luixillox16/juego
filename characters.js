@@ -1,8 +1,12 @@
-
+// js/characters.js - Armario con filtros verticales y selección (reemplaza el existente)
 (() => {
   const armarioPlayers = document.getElementById("armarioPlayers");
   const armarioEnemies = document.getElementById("armarioEnemies");
   const selectAndPlayBtn = document.getElementById("selectAndPlayBtn");
+
+  const filterAllBtn = document.getElementById("filterAll");
+  const filterPlayersBtn = document.getElementById("filterPlayers");
+  const filterEnemiesBtn = document.getElementById("filterEnemies");
 
   // Presets 16x16 (fallbacks)
   function makePixelsFromPattern(fn){
@@ -50,17 +54,12 @@
     const ctx = canvasEl.getContext("2d");
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0,0,canvasEl.width,canvasEl.height);
-    // maintain aspect and center
-    const ar = img.naturalWidth / img.naturalHeight;
-    let dw = canvasEl.width, dh = canvasEl.height;
-    let sx=0, sy=0, sw=img.naturalWidth, sh=img.naturalHeight;
-    // draw full image scaled to thumb box
-    ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, dw, dh);
+    ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, canvasEl.width, canvasEl.height);
   }
 
   function makeTileForFolderImage(name, imgSrc, type){
     const tile = document.createElement("div"); tile.className="skin-tile";
-    const thumb = document.createElement("canvas"); thumb.width=48; thumb.height=48; thumb.className="skin-thumb";
+    const thumb = document.createElement("canvas"); thumb.width=64; thumb.height=64; thumb.className="skin-thumb";
     const img = new Image();
     img.src = imgSrc;
     img.onload = () => drawThumbFromImage(img, thumb);
@@ -82,13 +81,12 @@
       tile.classList.add("selected");
     });
 
-    // delete control only for custom folder: we don't provide delete (filesystem)
     return tile;
   }
 
   function makeTile(name, pixels, type, isCustom=false){
     const tile = document.createElement("div"); tile.className="skin-tile";
-    const thumb = document.createElement("canvas"); thumb.width=48; thumb.height=48; thumb.className="skin-thumb";
+    const thumb = document.createElement("canvas"); thumb.width=64; thumb.height=64; thumb.className="skin-thumb";
     drawThumbFromPixels(pixels, thumb);
     tile.appendChild(thumb);
     const label = document.createElement("div"); label.className="skin-label"; label.textContent = name;
@@ -102,7 +100,7 @@
         let list = JSON.parse(localStorage.getItem("customSprites") || "[]");
         list = list.filter(s => !(s.name === name && s.type === type));
         localStorage.setItem("customSprites", JSON.stringify(list));
-        populate();
+        populate(); // refrescar
       });
       tile.appendChild(del);
     }
@@ -132,6 +130,7 @@
     }
   }
 
+  // populate separates containers but we will show/hide via filter
   async function populate(){
     armarioPlayers.innerHTML = ""; armarioEnemies.innerHTML = "";
 
@@ -166,7 +165,41 @@
     const firstE = armarioEnemies.querySelector(".skin-tile");
     if (firstP) firstP.click();
     if (firstE) firstE.click();
+
+    // ensure filter UI initial state: show all
+    showType(currentFilter);
   }
+
+  // filter management
+  let currentFilter = 'all'; // 'all' | 'player' | 'enemy'
+  function setActiveFilterBtn() {
+    filterAllBtn.classList.toggle('active', currentFilter === 'all');
+    filterPlayersBtn.classList.toggle('active', currentFilter === 'player');
+    filterEnemiesBtn.classList.toggle('active', currentFilter === 'enemy');
+
+    filterAllBtn.setAttribute('aria-selected', currentFilter === 'all');
+    filterPlayersBtn.setAttribute('aria-selected', currentFilter === 'player');
+    filterEnemiesBtn.setAttribute('aria-selected', currentFilter === 'enemy');
+  }
+
+  function showType(type) {
+    currentFilter = type;
+    setActiveFilterBtn();
+    if (type === 'all') {
+      armarioPlayers.style.display = 'grid';
+      armarioEnemies.style.display = 'grid';
+    } else if (type === 'player') {
+      armarioPlayers.style.display = 'grid';
+      armarioEnemies.style.display = 'none';
+    } else {
+      armarioPlayers.style.display = 'none';
+      armarioEnemies.style.display = 'grid';
+    }
+  }
+
+  filterAllBtn.addEventListener('click', () => showType('all'));
+  filterPlayersBtn.addEventListener('click', () => showType('player'));
+  filterEnemiesBtn.addEventListener('click', () => showType('enemy'));
 
   selectAndPlayBtn.addEventListener("click", () => {
     if (chosenPlayer) localStorage.setItem("selectedPlayer", JSON.stringify(chosenPlayer));
