@@ -111,7 +111,7 @@ main{flex:1;padding:28px;display:flex;align-items:flex-start;justify-content:cen
 .close-x:hover{background:rgba(255,255,255,0.02);color:var(--text)}
 
 /* inputs / text */
-.text-input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:var(--text);margin-top:8px;font-size:14px}
+.text-input{width:100%;Padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:var(--text);margin-top:8px;font-size:14px}
 .text-input::placeholder{color:rgba(255,255,255,0.35)}
 .text-input:focus{outline:none;box-shadow:0 12px 36px rgba(2,6,12,0.6);border-color:var(--btn-hover)}
 
@@ -162,4 +162,52 @@ footer{padding:10px 18px;color:var(--muted);font-size:13px;text-align:center;bor
   .right-panel{width:100%}
   .menu-card{width:92%}
   .modal-card{width:92%}
+}
+
+/* ------- controles de audio (añadir al final del style.css) ------- */
+.menu-audio { margin-top: 14px; text-align:center; }
+.audio-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.audio-btn {
+  background: linear-gradient(#fff,#eee);
+  border-radius: 6px;
+  padding: 6px 8px;
+  border: 1px solid rgba(0,0,0,0.12);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+.audio-btn[aria-pressed="true"] {
+  background: linear-gradient(#dff6ff,#bfeefc);
+}
+.audio-controls input[type="range"] {
+  width: 140px;
+  height: 6px;
+}
+@media (max-width:920px){
+  .audio-controls input[type="range"] { width: 110px; }
+}
+
+/* ------- Reglas específicas para Armario y Editor (vertical) ------- */
+.armario-page { padding: 18px; display: flex; flex-direction: column; gap: 18px; align-items: stretch; }
+.armario-top { display:flex; gap:10px; align-items:center; justify-content:center; }
+.armario-filters { display:flex; gap:8px; flex-wrap:wrap; }
+.filter-btn { padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); cursor:pointer; background:var(--panel-1); color:var(--text); font-weight:700; }
+.filter-btn.active { background: linear-gradient(180deg,var(--btn-hover),var(--btn-start)); box-shadow: 0 4px 14px rgba(0,0,0,0.35); color:var(--text); }
+.armario-list { display:flex; flex-direction:column; gap:14px; align-items:stretch; }
+.skins-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap:12px; }
+.skin-tile { position:relative; border-radius:8px; padding:8px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03)); display:flex; flex-direction:column; align-items:center; gap:8px; min-height:120px; justify-content:center; transition: transform .12s ease, box-shadow .12s ease; }
+.skin-tile:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+.skin-thumb{ width:96px; height:96px; image-rendering: pixelated; border-radius:8px; background:#0b2230; border:1px solid rgba(255,255,255,0.03); display:block; }
+.skin-label{color:var(--muted);font-size:13px;margin-top:6px;text-align:center}
+.skins-grid.small { display:grid; grid-template-columns: repeat(auto-fill,minmax(96px,1fr)); gap:8px; }
+.filter-btn.active { outline: none; }
+@media (max-width:920px){
+  .skins-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+  .skin-thumb{ width:56px; height:56px; }
+  .skins-grid.small { grid-template-columns: repeat(auto-fill,minmax(80px,1fr)); }
 }
