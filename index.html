@@ -21,6 +21,22 @@
         <button onclick="location.href='thankyou.html'" class="btn">Salir</button>
       </div>
       <p class="menu-foot">Usa ← → para moverte y espacio para disparar. Las skins se guardan en tu navegador.</p>
+
+      <!-- CONTROLES DE AUDIO (integrado) -->
+      <div class="menu-audio">
+        <audio id="menuAudio" preload="auto" loop>
+          <source src="audios/End_of_Line_Daft_Punk.mp3" type="audio/mpeg" />
+          <source src="audios/End_of_Line_Daft_Punk.ogg" type="audio/ogg" />
+          Tu navegador no soporta audio HTML5.
+        </audio>
+
+        <div class="audio-controls" aria-hidden="false">
+          <button id="audioToggle" class="audio-btn" title="Reproducir / Pausar" aria-pressed="false">🔈</button>
+          <input id="audioVolume" type="range" min="0" max="1" step="0.01" value="0.6" />
+        </div>
+      </div>
+      <!-- /CONTROLES DE AUDIO -->
+
     </div>
   </main>
 
@@ -59,6 +75,9 @@
       </div>
     </div>
   </div>
+
+  <!-- audio script (colocado antes del script inline para que el control esté disponible) -->
+  <script src="js/audio.js"></script>
 
   <script>
     (function(){
