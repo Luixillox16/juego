@@ -7,32 +7,30 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
+  <header style="padding:12px 18px; display:flex; align-items:center; gap:12px;">
     <a class="back-link" href="index.html">← Menú</a>
-    <h1>Armario — Personajes</h1>
+    <h1 style="margin:0">Armario — Skins</h1>
   </header>
 
-  <main class="armario-page">
-    <section class="armario-columns">
-      <div>
-        <h3>Skins Jugador</h3>
-        <div id="armarioPlayers" class="skins-grid"></div>
+  <main class="armario-page" style="padding:18px;">
+    <div class="armario-top">
+      <div class="armario-filters" role="tablist" aria-label="Filtrar skins">
+        <button id="filterAll" class="filter-btn active" role="tab" aria-selected="true">Todos</button>
+        <button id="filterPlayers" class="filter-btn" role="tab" aria-selected="false">Jugadores</button>
+        <button id="filterEnemies" class="filter-btn" role="tab" aria-selected="false">Enemigos</button>
       </div>
-      <div>
-        <h3>Skins Enemigo</h3>
-        <div id="armarioEnemies" class="skins-grid"></div>
-      </div>
+    </div>
+
+    <section class="armario-list" style="width:100%;max-width:1100px;margin:0 auto;">
+      <!-- grid containers: se rellenan desde js/characters.js -->
+      <div id="armarioPlayers" class="skins-grid" aria-label="Skins de jugadores"></div>
+      <div id="armarioEnemies" class="skins-grid" aria-label="Skins de enemigos"></div>
     </section>
 
-    <div class="armario-actions">
-      <button id="selectAndPlayBtn">Seleccionar y Jugar</button>
-      <button onclick="location.href='editor.html'">Abrir Editor</button>
+    <div style="display:flex;justify-content:center;margin-top:16px;">
+      <button id="selectAndPlayBtn" class="btn primary">Seleccionar y Jugar</button>
     </div>
   </main>
-
-  <footer>
-    <small>Selecciona una skin para jugador y otra para enemigo. Se guardan en tu navegador.</small>
-  </footer>
 
   <script src="js/characters.js"></script>
 </body>
