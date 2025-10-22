@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Space Invaders — Editor de Sprites</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <a class="back-link" href="index.html">← Menú</a>
+    <h1>Editor de Sprites</h1>
+  </header>
+
+  <main class="editor-page">
+    <section class="editor-main">
+      <div id="editorRoot"></div>
+      <div class="editor-controls">
+        <label>Nombre: <input id="spriteName" value="mi-sprite" /></label>
+        <label>Tipo:
+          <select id="spriteType">
+            <option value="player">Jugador</option>
+            <option value="enemy">Enemigo</option>
+          </select>
+        </label>
+        <div class="editor-buttons">
+          <button id="saveSpriteBtn">Guardar y añadir al armario</button>
+          <button id="exportPngBtn">Exportar PNG</button>
+          <button id="eraserBtn" title="Borrador (Shift+click o clic derecho)">Borrador</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="editor-side">
+      <h4>Subir imagen</h4>
+      <input id="uploadSpriteFile" type="file" accept="image/*" />
+      <div style="height:10px"></div>
+      <button id="openPixelEditorBtn">Reiniciar lienzo 16×16</button>
+      <h4 style="margin-top:12px">Skins guardadas</h4>
+      <div id="editorSavedList" class="skins-grid small"></div>
+    </aside>
+  </main>
+
+  <footer>
+    <small>Shift+click o clic derecho para borrar. Usa el botón Borrador para seleccionar transparencia.</small>
+  </footer>
+
+  <script src="js/editor.js"></script>
+</body>
+</html>

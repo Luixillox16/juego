@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Space Invaders — Armario</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <a class="back-link" href="index.html">← Menú</a>
+    <h1>Armario — Personajes</h1>
+  </header>
+
+  <main class="armario-page">
+    <section class="armario-columns">
+      <div>
+        <h3>Skins Jugador</h3>
+        <div id="armarioPlayers" class="skins-grid"></div>
+      </div>
+      <div>
+        <h3>Skins Enemigo</h3>
+        <div id="armarioEnemies" class="skins-grid"></div>
+      </div>
+    </section>
+
+    <div class="armario-actions">
+      <button id="selectAndPlayBtn">Seleccionar y Jugar</button>
+      <button onclick="location.href='editor.html'">Abrir Editor</button>
+    </div>
+  </main>
+
+  <footer>
+    <small>Selecciona una skin para jugador y otra para enemigo. Se guardan en tu navegador.</small>
+  </footer>
+
+  <script src="js/characters.js"></script>
+</body>
+</html>

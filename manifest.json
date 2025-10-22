@@ -1,0 +1,33 @@
+{
+  "personajes": [
+    "personajes/cuphead.png",
+    "personajes/cuphead2.png",
+    "personajes/chucho.png",
+    "personajes/kirby.png",
+    "personajes/minipekka.png",
+    "personajes/charm.png",
+    "personajes/chocobi.png",
+    "personajes/dinosaurio.png",
+    "personajes/gallina.png",
+    "personajes/glep.png",
+    "personajes/grub.png",
+    "personajes/junimo.png",
+    "personajes/kolog.png",
+    "personajes/mari.png",
+    "personajes/miku.png",
+    "personajes/navi.png",
+    "personajes/pato.png",
+    "personajes/tralalero.png",
+    "personajes/usagi.png"
+  ],
+  "enemigos": [
+    "enemigos/bowser.png",
+    "enemigos/goomba.png",
+    "enemigos/Koopaverde.png",
+    "enemigos/Kooparojo.png",
+    "enemigos/boo.png",
+    "enemigos/ChompCadenas.png",
+    "enemigos/slime.png"
+  ],
+  "generated_at": "2025-10-21T00:00:00.000Z"
+}

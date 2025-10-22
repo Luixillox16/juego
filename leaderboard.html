@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Space Invaders — Clasificación</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <a class="back-link" href="index.html">← Menú</a>
+    <h1>Clasificación</h1>
+  </header>
+
+  <main class="menu-card center" style="max-width:900px;margin:20px auto;">
+    <div style="width:100%;padding:12px;">
+      <p style="color:#9fb1c6">La tabla se actualiza cada vez que la abres.</p>
+      <table id="leaderboardTable" style="width:100%;border-collapse:collapse;background:transparent;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:6px">Pos</th>
+            <th style="text-align:left;padding:6px">Nombre</th>
+            <th style="text-align:right;padding:6px">Puntuación</th>
+            <th style="text-align:right;padding:6px">Fecha</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div style="display:flex;justify-content:flex-end;margin-top:12px">
+        <button id="refreshBtn" class="small">Actualizar</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/leaderboard.js"></script>
+</body>
+</html>

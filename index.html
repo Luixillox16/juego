@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Space Invaders — Menú</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="menu-page">
+    <div class="menu-card center">
+      <h1 class="menu-title">SPACE INVADERS
+        <span id="registeredBadge" class="registered-badge" style="display:none"></span>
+      </h1>
+      <p class="menu-sub">Personaliza tus skins y juega</p>
+      <div class="menu-buttons">
+        <button id="menuPlayBtn" class="btn primary">Jugar</button>
+        <button onclick="location.href='characters.html'" class="btn">Personajes (Armario)</button>
+        <button onclick="location.href='editor.html'" class="btn">Editor</button>
+        <button onclick="location.href='leaderboard.html'" class="btn">Clasificación</button>
+        <button onclick="location.href='thankyou.html'" class="btn">Salir</button>
+      </div>
+      <p class="menu-foot">Usa ← → para moverte y espacio para disparar. Las skins se guardan en tu navegador.</p>
+    </div>
+  </main>
+
+  <!-- Registro modal (diseño tipo menu-card) -->
+  <div id="registerModal" class="modal hidden" aria-modal="true" role="dialog">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card menu-card">
+      <div class="modal-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <h3 style="margin:0">Registro para Clasificación</h3>
+        <button id="closeRegisterModal" class="close-x" title="Cerrar">✕</button>
+      </div>
+
+      <div class="modal-content" style="margin-top:12px;">
+        <p style="color:var(--muted);line-height:1.4">
+          Registrarte permitirá que la primera puntuación quede guardada en la clasificación. Sólo se puede registrar una vez por dispositivo.
+          Si no te registras, podrás jugar pero tu puntuación no se guardará.
+        </p>
+
+        <div id="alreadyRegistered" class="info-box" style="display:none;margin-top:8px;">
+          En este dispositivo ya existe un registro: <strong id="registeredNameSpan"></strong>.
+        </div>
+
+        <label for="registerNameInput" style="display:block;margin-top:12px;font-weight:600;color:#cfe6ff">Nombre o apodo</label>
+        <input id="registerNameInput" placeholder="Ej: pepe_123 (3-16 caracteres)" class="text-input" />
+
+        <div id="nameError" class="error-msg" style="display:none"></div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+          <button id="playWithoutRegisterBtn" class="btn secondary">Jugar sin registrar</button>
+          <button id="confirmRegisterBtn" class="btn primary">Registrarme (guardar)</button>
+        </div>
+
+        <p style="margin-top:12px;color:var(--muted);font-size:13px">
+          Nota: el registro se guarda en este navegador/dispositivo y no podrá modificarse desde aquí.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const REGISTER_KEY = 'registeredPlayer';
+      const API_REGISTER_URL = '/space-invaders/api/register.php';
+
+      const menuPlayBtn = document.getElementById('menuPlayBtn');
+      const registerModal = document.getElementById('registerModal');
+      const registerNameInput = document.getElementById('registerNameInput');
+      const confirmRegisterBtn = document.getElementById('confirmRegisterBtn');
+      const playWithoutRegisterBtn = document.getElementById('playWithoutRegisterBtn');
+      const alreadyRegistered = document.getElementById('alreadyRegistered');
+      const registeredNameSpan = document.getElementById('registeredNameSpan');
+      const nameError = document.getElementById('nameError');
+      const registeredBadge = document.getElementById('registeredBadge');
+      const closeRegisterModal = document.getElementById('closeRegisterModal');
+
+      function getRegisteredPlayer() {
+        try { return JSON.parse(localStorage.getItem(REGISTER_KEY) || 'null'); } catch { return null; }
+      }
+      function setRegisteredPlayerLocal(name) {
+        if (getRegisteredPlayer()) return false;
+        const obj = { name: name, created_at: new Date().toISOString() };
+        localStorage.setItem(REGISTER_KEY, JSON.stringify(obj));
+        return true;
+      }
+
+      function showRegisteredBadgeIfAny() {
+        const reg = getRegisteredPlayer();
+        if (reg && reg.name) {
+          registeredBadge.style.display = 'inline-block';
+          registeredBadge.textContent = "Registrado: " + reg.name;
+        } else {
+          registeredBadge.style.display = 'none';
+        }
+      }
+
+      function validateName(name) {
+        const trimmed = (name || "").trim();
+        if (trimmed.length < 3) return "El nombre debe tener al menos 3 caracteres.";
+        if (trimmed.length > 16) return "El nombre no puede tener más de 16 caracteres.";
+        if (!/^[A-Za-z0-9_\-]+$/.test(trimmed)) return "Solo se permiten letras, números, guion bajo y guion (-).";
+        return "";
+      }
+
+      async function registerOnServer(name) {
+        try {
+          const resp = await fetch(API_REGISTER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name })
+          });
+          return await resp.json();
+        } catch (e) {
+          return { success: false, message: 'Error de conexión' };
+        }
+      }
+
+      menuPlayBtn.addEventListener('click', () => {
+        nameError.style.display = 'none';
+        const reg = getRegisteredPlayer();
+        if (reg && reg.name) {
+          alreadyRegistered.style.display = 'block';
+          registeredNameSpan.textContent = reg.name;
+          registerNameInput.style.display = 'none';
+          confirmRegisterBtn.textContent = 'Jugar como ' + reg.name;
+        } else {
+          alreadyRegistered.style.display = 'none';
+          registerNameInput.style.display = 'block';
+          registerNameInput.value = '';
+          confirmRegisterBtn.textContent = 'Registrarme (guardar)';
+        }
+        registerModal.classList.remove('hidden');
+      });
+
+      closeRegisterModal.addEventListener('click', ()=> registerModal.classList.add('hidden'));
+      registerModal.querySelector('.modal-backdrop').addEventListener('click', ()=> registerModal.classList.add('hidden'));
+
+      confirmRegisterBtn.addEventListener('click', async () => {
+        const reg = getRegisteredPlayer();
+        if (reg && reg.name) {
+          sessionStorage.setItem('play_registered', 'true');
+          location.href = 'game.html';
+          return;
+        }
+        const name = (registerNameInput.value || '').trim();
+        const v = validateName(name);
+        if (v) {
+          nameError.style.display = 'block';
+          nameError.textContent = v;
+          return;
+        } else {
+          nameError.style.display = 'none';
+        }
+        const ok = setRegisteredPlayerLocal(name);
+        if (!ok) {
+          alert('Ya existe un registro en este dispositivo.');
+          return;
+        }
+        showRegisteredBadgeIfAny();
+
+        // Intentar crear registro en la BD (no bloqueante)
+        const res = await registerOnServer(name);
+        if (!res.success) console.warn('Registro en API falló:', res.message);
+
+        sessionStorage.setItem('play_registered', 'true');
+        location.href = 'game.html';
+      });
+
+      playWithoutRegisterBtn.addEventListener('click', () => {
+        sessionStorage.setItem('play_unregistered', 'true');
+        location.href = 'game.html';
+      });
+
+      showRegisteredBadgeIfAny();
+    })();
+  </script>
+</body>
+</html>

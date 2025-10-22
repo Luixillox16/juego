@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Space Invaders — Juego</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .header-registered { color:#cfe6ff; font-size:13px; margin-left:12px; }
+    .game-registered-hud { position:absolute; right:12px; top:70px; color:#cfe6ff; font-size:13px; background: rgba(2,6,12,0.35); padding:6px 8px; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="back-link" href="index.html">← Menú</a>
+    <h1>Space Invaders <span id="headerRegistered" class="header-registered" style="display:none"></span></h1>
+  </header>
+
+  <main class="game-container horizontal">
+    <section id="left-panel" style="position:relative">
+      <canvas id="gameCanvas" width="900" height="480"></canvas>
+      <div class="controls">
+        <button id="startBtn">Iniciar / Reiniciar</button>
+        <button id="pauseBtn">Pausa</button>
+        <div class="info">
+          <div>Puntuación: <span id="score">0</span></div>
+          <div>Vidas: <span id="lives">3</span></div>
+        </div>
+      </div>
+
+      <div id="touchControls" class="touch-controls hidden">
+        <button id="touchLeft" class="touch-btn">◀</button>
+        <button id="touchFire" class="touch-btn fire">●</button>
+        <button id="touchRight" class="touch-btn">▶</button>
+      </div>
+
+      <!-- HUD que muestra si el jugador está registrado -->
+      <div id="gameRegisteredHud" class="game-registered-hud" style="display:none">
+        Registrado: <span id="gameRegisteredName"></span><br>
+        (Tu primera puntuación se guardará)
+      </div>
+    </section>
+
+    <aside class="right-panel">
+      <h3>Skins seleccionadas</h3>
+      <div class="selection-preview">
+        <div>
+          <strong>Jugador</strong>
+          <canvas id="previewPlayer" width="96" height="96" class="skin-thumb"></canvas>
+          <div id="previewPlayerName" class="skin-label">Predeterm.</div>
+        </div>
+        <div>
+          <strong>Enemigo</strong>
+          <canvas id="previewEnemy" width="96" height="96" class="skin-thumb"></canvas>
+          <div id="previewEnemyName" class="skin-label">Predeterm.</div>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <button onclick="location.href='characters.html'">Cambiar skins</button>
+        <button onclick="location.href='index.html'">Volver al menú</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <small>Espacio: disparo. Flechas: mover. P: pausa. En móvil usa los botones táctiles.</small>
+  </footer>
+
+  <script src="js/game.js"></script>
+  <script>
+    // Show registered name in header/HUD (read from localStorage REGISTER_KEY)
+    (function(){
+      const REGISTER_KEY = 'registeredPlayer';
+      function getRegisteredPlayer(){ try{ return JSON.parse(localStorage.getItem(REGISTER_KEY) || 'null'); }catch{return null;} }
+      const reg = getRegisteredPlayer();
+      if (reg && reg.name) {
+        const header = document.getElementById('headerRegistered');
+        header.textContent = reg.name;
+        header.style.display = 'inline-block';
+        const hud = document.getElementById('gameRegisteredHud');
+        document.getElementById('gameRegisteredName').textContent = reg.name;
+        hud.style.display = 'block';
+      }
+      // If user used the "play registered" session flag from menu, also display (optional)
+      const sess = sessionStorage.getItem('play_registered');
+      if (sess && !reg) {
+        // session registered but no persistent registered: show session name if set in sessionStorage (optional)
+        // (we don't allow changing persistent registration here)
+      }
+    })();
+  </script>
+</body>
+</html>
