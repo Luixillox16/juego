@@ -5,6 +5,32 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Space Invaders — Editor de Sprites</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Paleta y layout pequeño específico del editor (complementario al style.css) */
+    .palette-wrap { display:flex; flex-direction:column; gap:8px; align-items:center; margin-top:8px; }
+    .palette { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+    .palette-button {
+      width:32px; height:32px; border-radius:6px; border:2px solid rgba(255,255,255,0.04);
+      cursor:pointer; box-shadow: inset 0 -4px 8px rgba(0,0,0,0.25);
+    }
+    .palette-button.selected { outline:3px solid rgba(255,255,255,0.06); transform: translateY(-3px); }
+    .palette-controls { display:flex; gap:8px; align-items:center; justify-content:center; }
+    .palette-label { color:var(--muted); font-size:13px; margin-bottom:4px; text-align:center; }
+    .transparent-button {
+      width:32px;height:32px;border-radius:6px;border:2px dashed rgba(255,255,255,0.08);
+      display:flex;align-items:center;justify-content:center;color:var(--muted); cursor:pointer;
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
+    }
+    .color-picker { width:38px; height:32px; padding:0; border-radius:6px; border:none; cursor:pointer; }
+    .editor-canvas-wrap { display:flex; justify-content:center; margin-top:12px; }
+    /* canvas container styled as white with subtle shadow */
+    .editor-canvas { background: #ffffff; padding: 8px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.35); display:inline-block; }
+    .editor-canvas canvas { display:block; image-rendering: pixelated; border-radius:4px; background: #ffffff; }
+    @media (max-width:920px){
+      .palette-button { width:28px; height:28px; }
+      .color-picker { width:34px; height:28px; }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -13,32 +39,55 @@
   </header>
 
   <main class="editor-page">
-    <section class="editor-main">
-      <div id="editorRoot"></div>
-      <div class="editor-controls">
-        <label>Nombre: <input id="spriteName" value="mi-sprite" /></label>
-        <label>Tipo:
-          <select id="spriteType">
+    <section style="max-width:1100px;width:100%;margin:0 auto;">
+      <!-- canvas area: wrapper shows white background and padding -->
+      <div class="editor-canvas-wrap">
+        <div id="editorCanvasContainer" class="editor-canvas" aria-label="Lienzo de edición">
+          <!-- canvas será creado por js/editor.js -->
+        </div>
+      </div>
+
+      <div class="editor-controls" style="margin-top:10px;align-items:center;justify-content:center;flex-wrap:wrap;">
+        <label>Nombre: <input id="spriteName" value="mi-sprite" class="text-input" style="margin-left:8px" /></label>
+
+        <label style="margin-left:8px">Tipo:
+          <select id="spriteType" style="margin-left:6px">
             <option value="player">Jugador</option>
             <option value="enemy">Enemigo</option>
           </select>
         </label>
-        <div class="editor-buttons">
-          <button id="saveSpriteBtn">Guardar y añadir al armario</button>
-          <button id="exportPngBtn">Exportar PNG</button>
-          <button id="eraserBtn" title="Borrador (Shift+click o clic derecho)">Borrador</button>
+
+        <div class="editor-buttons" style="margin-left:8px;">
+          <button id="saveSpriteBtn" class="btn">Guardar y añadir al armario</button>
+          <button id="exportPngBtn" class="btn">Exportar PNG</button>
+          <button id="eraserBtn" class="btn">Borrador</button>
         </div>
       </div>
-    </section>
 
-    <aside class="editor-side">
-      <h4>Subir imagen</h4>
-      <input id="uploadSpriteFile" type="file" accept="image/*" />
+      <!-- PALETA -->
+      <div class="palette-wrap" aria-hidden="false">
+        <div class="palette-label">Paleta de colores — selecciona un color y pinta el lienzo</div>
+        <div id="palette" class="palette" role="toolbar" aria-label="Paleta de colores"></div>
+        <div class="palette-controls">
+          <button id="transparentBtn" class="transparent-button" title="Transparente (borrador)">✕</button>
+          <input id="customColorInput" class="color-picker" type="color" title="Color personalizado" />
+        </div>
+      </div>
+
       <div style="height:10px"></div>
-      <button id="openPixelEditorBtn">Reiniciar lienzo 16×16</button>
-      <h4 style="margin-top:12px">Skins guardadas</h4>
-      <div id="editorSavedList" class="skins-grid small"></div>
-    </aside>
+
+      <div class="editor-bottom">
+        <div class="editor-saved-head" style="display:flex;gap:8px;align-items:center;justify-content:space-between;">
+          <h4 style="margin:0">Skins guardadas</h4>
+          <div class="editor-filters" role="tablist" aria-label="Filtrar skins guardadas">
+            <button id="savedAll" class="filter-btn active">Todas</button>
+            <button id="savedPlayers" class="filter-btn">Jugadores</button>
+            <button id="savedEnemies" class="filter-btn">Enemigos</button>
+          </div>
+        </div>
+        <div id="editorSavedList" class="skins-grid small" style="margin-top:8px"></div>
+      </div>
+    </section>
   </main>
 
   <footer>
